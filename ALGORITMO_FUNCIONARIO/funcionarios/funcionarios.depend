@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1638567734 source:c:\users\36825\desktop\algoritmo_funcionario\funcionarios\main.c
+	<stdio.h>
+	<stdlib.h>
+
