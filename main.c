@@ -11,13 +11,16 @@ char c_empresa [64];
 struct funcionario funcionarios [21];
 struct funcionario funcionarios1 [21];
 FILE *arq,*arq1_nome,*arq2_horas;
+
+
 void menu (){   
     printf ("1 - Gerar Lista de Nomes \n");
-    printf ("2 - Ordenar por Nome\n");
-    printf ("3 - Ordenar por hora\n");
-    printf ("4 - Imprimir lista\n");
+    printf ("2 - Imprimir lista\n");
+    printf ("3 - Apagar arquivos\n");
     printf ("0 - Sair\n");
 }
+
+
 void gerarListaNomes (){ 
         arq = fopen ("funcionarios", "w");
         if ((arq=fopen("funcionarios", "w"))!=NULL){
@@ -38,8 +41,11 @@ void gerarListaNomes (){
             }
         }
     fclose (arq);
-
+    system ("pause");
+    system ("cls");
 }
+
+
 
 void OrdenarPorNome (){
  struct funcionario temp;
@@ -55,22 +61,26 @@ void OrdenarPorNome (){
      arq1_nome = fopen ("funcionarios_nomes", "w");
         if ((arq1_nome=fopen("funcionarios_nomes", "w"))!=NULL){
             for (int i = 0 ; i < 3 ; i++){                    
-                fprintf (arq2_horas, "empresa: %s | numero funcionario: %i | nome: %s | idade: %i | horas trabalhadas: %i | \n",c_empresa, i+1, funcionarios[i].nome, funcionarios[i].idade, funcionarios[i].horas);
+                fprintf (arq1_nome, "empresa: %s | numero funcionario: %i | nome: %s | idade: %i | horas trabalhadas: %i | \n",c_empresa, i+1, funcionarios[i].nome, funcionarios[i].idade, funcionarios[i].horas);
 
             }
         }
-    fclose (arq1_nome);
+        fclose (arq1_nome);
     for (int i = 0 ; i < 3 ; i++){
         printf ("pessoa: %s idade: %i horas: %i\n", funcionarios[i].nome,funcionarios[i].idade, funcionarios[i].horas );
     }
+    system ("pause");
+    system ("cls");
 }
+
+
 
 void OrdenarPorHora (){
    
    struct funcionario temp;
     for (int i = 0 ; i < 2 ; i++){
         for (int j = 0 ; j < 2 ; j ++ ){
-        if (funcionarios[j].horas>funcionarios[j+1].horas){
+        if (funcionarios[j].horas<funcionarios[j+1].horas){
             temp = funcionarios[j];
             funcionarios[j]=funcionarios[j+1];
             funcionarios[j+1]=temp;
@@ -88,8 +98,10 @@ void OrdenarPorHora (){
     for (int i = 0 ; i < 3 ; i++){
         printf ("pessoa: %s idade: %i horas: %i\n", funcionarios[i].nome,funcionarios[i].idade, funcionarios[i].horas );
     }
-
+system ("pause");
 }
+
+
 void ImprimirLista (){
     arq= fopen("funcionarios", "r");
     char cPalavra[64];
@@ -97,20 +109,43 @@ void ImprimirLista (){
         printf ("Erro ao abrir o arquivo\n");
         exit (1);
     }
-    system ("cls");
-    printf ("Buscando dados no arquivo, aguarde...\n");
-    printf ("NUMERO DO FUNCIONARIO | IDADE | HORAS TRABALHADAS\n");
     getchar();
     while (fgets (cPalavra,64, arq)!=NULL){
         printf ("\n");
         printf (" %s  ",cPalavra);
     }   
     printf ("\n\n");
+    system ("pause");
+    system ("cls");
 }
 
+void menu_case2 (){
+    printf ("Como voce deseja exibir a lista?\n");
+    printf (" 1 - Como foi salva. Obs> sem tratamento dos dados\n");
+    printf (" 2 - Ordenada por horas\n");
+    printf (" 3 - Ordenada por nomes\n");
+
+}
+void apagar (){
+    arq = fopen ("funcionarios", "ab");
+
+    printf ("Isso apagará todos os dados dos arquivos! Você tem certeza? y/n\n");
+    char op;
+    scanf ("%c", &op);
+    if (op=='y'){
+        remove (arq);
+    }
+
+    system ("pause");
+    system ("cls");
+
+
+
+
+}
 int main ( ){
     setlocale(LC_ALL, "Portuguese");
-    int op;
+    int op,op4;
     do {
     menu();
     scanf ("%d", &op);
@@ -122,20 +157,38 @@ int main ( ){
         printf ("Funcionarios da empresa %s\n", c_empresa);
         gerarListaNomes();
         break;
+      
         case 2:
-        OrdenarPorNome();
+        menu_case2 ();
+        scanf ("%d", &op4);
+            switch (op4)
+            {
+            case 1:
+                ImprimirLista();
+                break;
+            case 2: 
+                OrdenarPorHora();
+            break;
+            case 3: 
+                OrdenarPorNome();
+            break;
+
+            default:
+                printf ("Opção inválida!\n");
+                break;
+            }
         break;
-        case 3:
-        OrdenarPorHora();
-        break;
-        case 4:
-        ImprimirLista();
+
+        case 3: 
+            apagar();
         break;
         case 0:
         break;
+
         default:
         printf ("Opcao invalida!");
         break;
+
     }
 
     }while (op!=0);
